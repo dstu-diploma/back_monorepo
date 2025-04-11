@@ -1,13 +1,28 @@
 services:
   db:
     image: postgres:15
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_DATABASE=main
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+
 
   auth_service:
     container_name: auth_service
     build: ./auth_service
-    env_file:
-      - .env
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/authservice
+      - JWT_SECRET=dstu
     ports:
       - 8000:8000
+
+  user_service:
+    container_name: user_service
+    build: ./user_service
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/userservice
+      - JWT_SECRET=dstu
+      - PASSWORD_SALT=dstu
+    ports:
+      - 8001:8000
