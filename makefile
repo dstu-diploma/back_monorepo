@@ -1,6 +1,6 @@
 setup:
 	cp docker-compose.example.yml docker-compose.yml
-	git submodule update --recursive --remote
+	git submodule update --init --recursive --remote
 
 start:
 	docker compose up --build
