@@ -5,7 +5,7 @@ services:
       - POSTGRES_DATABASE=main
       - POSTGRES_PASSWORD=password
     volumes:
-      - ./dev/init_db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./dev/init_db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
