@@ -1,6 +1,6 @@
-[submodule "auth_service"]
-	path = auth_service
-	url = git@github.com:dstu-diploma/authservice.git
-[submodule "user_service"]
-	path = user_service
+[submodule "userservice"]
+	path = userservice
 	url = git@github.com:dstu-diploma/userservice.git
+[submodule "teamservice"]
+	path = teamservice
+	url = git@github.com:dstu-diploma/teamservice.git
