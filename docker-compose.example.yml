@@ -4,6 +4,8 @@ services:
     environment:
       - POSTGRES_DATABASE=main
       - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
     volumes:
       - ./dev/init_db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     healthcheck:
