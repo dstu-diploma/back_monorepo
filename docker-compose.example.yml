@@ -23,8 +23,6 @@ services:
       - USER_SERVICE_URL=http://userservice:8000/internal
       - USER_SERVICE_API_KEY=apikey
       - JWT_SECRET=dstu
-    ports:
-      - 8000:8000
     depends_on:
       db:
         condition: service_healthy
@@ -42,8 +40,6 @@ services:
       - AVATAR_PATH=/uploads/avatars/
     volumes:
       - ./dev/local/:/uploads/avatars/
-    ports:
-      - 8001:8000
     depends_on:
       db:
         condition: service_healthy
