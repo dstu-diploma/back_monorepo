@@ -7,4 +7,4 @@ start:
 
 example-start:
 	make setup;
-	make start;
+	docker compose -f docker-compose.example.yml up --build
