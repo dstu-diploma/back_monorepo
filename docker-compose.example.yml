@@ -46,6 +46,19 @@ services:
     networks:
       - pakoski_net
 
+  hackathonservice:
+    container_name: hackathonservice
+    build: ./hackathonservice
+    environment:
+      - ROOT_PATH=/hackathon
+      - DATABASE_URL=postgres://postgres:password@db:5432/hackathonservice
+      - JWT_SECRET=dstu
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - pakoski_net
+
   nginx:
     image: nginx:latest
     ports:
@@ -56,6 +69,7 @@ services:
     depends_on:
       - userservice
       - teamservice
+      - hackathonservice
     networks:
       - pakoski_net
 

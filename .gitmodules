@@ -4,3 +4,6 @@
 [submodule "teamservice"]
 	path = teamservice
 	url = git@github.com:dstu-diploma/teamservice.git
+[submodule "hackathonservice"]
+	path = hackathonservice
+	url = git@github.com:dstu-diploma/hackathonservice.git
