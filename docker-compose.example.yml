@@ -64,6 +64,21 @@ services:
     networks:
       - pakoski_net
 
+  chatservice:
+    container_name: chatservice
+    build: ./chatservice
+    environment:
+      - ROOT_PATH=/chat
+      - DATABASE_URL=postgres://postgres:password@db:5432/chatservice
+      - USER_SERVICE_URL=http://userservice:8000/internal
+      - USER_SERVICE_API_KEY=apikey
+      - JWT_SECRET=dstu
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - pakoski_net
+
   nginx:
     image: nginx:latest
     ports:
@@ -75,6 +90,7 @@ services:
       - userservice
       - teamservice
       - hackathonservice
+      - chatservice
     networks:
       - pakoski_net
 
