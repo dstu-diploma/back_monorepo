@@ -24,6 +24,8 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/teamservice
       - USER_SERVICE_URL=http://userservice:8000/internal
       - USER_SERVICE_API_KEY=apikey
+      - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal
+      - HACKATHON_SERVICE_API_KEY=apikey
       - JWT_SECRET=dstu
       - INTERNAL_API_KEY=apikey
     depends_on:
@@ -56,8 +58,9 @@ services:
       - ROOT_PATH=/hackathon
       - DATABASE_URL=postgres://postgres:password@db:5432/hackathonservice
       - JWT_SECRET=dstu
-      - TEAM_SERVICE_URL=http://teamservice:8000/internal/
+      - TEAM_SERVICE_URL=http://teamservice:8000/internal
       - TEAM_SERVICE_API_KEY=apikey
+      - INTERNAL_API_KEY=apikey
     depends_on:
       db:
         condition: service_healthy
