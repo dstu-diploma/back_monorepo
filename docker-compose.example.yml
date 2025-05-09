@@ -1,3 +1,10 @@
+x-service-config: &service-config
+  depends_on:
+    db:
+      condition: service_healthy
+  networks:
+    - pakoski_net
+
 services:
   db:
     image: postgres:15
@@ -28,11 +35,7 @@ services:
       - HACKATHON_SERVICE_API_KEY=apikey
       - JWT_SECRET=dstu
       - INTERNAL_API_KEY=apikey
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - pakoski_net
+    <<: *service-config
 
   userservice:
     container_name: userservice
@@ -45,11 +48,7 @@ services:
       - AVATAR_PATH=/uploads/avatars/
     volumes:
       - ./dev/local/:/uploads/avatars/
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - pakoski_net
+    <<: *service-config
 
   hackathonservice:
     container_name: hackathonservice
@@ -61,11 +60,7 @@ services:
       - TEAM_SERVICE_URL=http://teamservice:8000/internal
       - TEAM_SERVICE_API_KEY=apikey
       - INTERNAL_API_KEY=apikey
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - pakoski_net
+    <<: *service-config
 
   chatservice:
     container_name: chatservice
@@ -74,11 +69,7 @@ services:
       - ROOT_PATH=/chat
       - DATABASE_URL=postgres://postgres:password@db:5432/chatservice
       - JWT_SECRET=dstu
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - pakoski_net
+    <<: *service-config
 
   nginx:
     image: nginx:latest
