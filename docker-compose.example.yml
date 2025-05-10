@@ -46,6 +46,9 @@ services:
       - JWT_SECRET=dstu
       - INTERNAL_API_KEY=apikey
       - AVATAR_PATH=/uploads/avatars/
+      - S3_ENDPOINT=http://s3:9000/
+      - S3_ACCESS_KEY=admin
+      - S3_SECRET_KEY=adminadmin
     volumes:
       - ./dev/local/:/uploads/avatars/
     <<: *service-config
