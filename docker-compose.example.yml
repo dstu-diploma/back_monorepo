@@ -71,6 +71,52 @@ services:
       - JWT_SECRET=dstu
     <<: *service-config
 
+  s3:
+    image: minio/minio
+    container_name: s3
+    ports:
+      # Привет, я devoops, и ты SPA-приложение!
+      # Вместо того что бы ожидать установку в корне домена, почему бы тебе искать ассеты относительно пути, ты жирный фронт.
+      # Вы видите SPA не могут быть отрендерены потому что они проксированы не в рут
+      # Чертовски ненавижу ебаных фронтэндеров, все что они делают, это требуют свою жареный nextjs, ебаный bloat, хештег убить всех фронтэндеров пусть горят тоже.
+      # Если вы относитесь к одному из этих типов React Vue, Angular а особенно Nextjs, вам следует. Ты должен срочно убить себя немедленно ты ебаный нигер.
+
+      # Был один фронтэндер, который посмотрел на меня на секунду очевидно пытаясь напасть на мое достоинство, так что в ответ я вытащил SSR и уничтожил его обратно на поля, откуда он пришел.
+      # Что эти ребята делают сегодня?
+      # Проклятый бандл, сам себя не соберет.
+      # Святые небеса, в старые добрые времена, если фронтэндер не мог организовать страницу на табличной разметке, в ответ он получал большую порку.
+      # Я был так чертовски зол, когда пошел в доку nextjs, я даже спросил мейнтейнера, какого хуя нельзя в рантайме решать где приложение
+      # Он выгнал меня, поэтому я не стал деплоить приложение, я как супергерой.
+      # https://cdn.discordapp.com/attachments/411551392441040906/1305976312137257085/641209ec4ea790eb.mp4?ex=681fa7b8&is=681e5638&hm=afc2afa04c4928b415dac440ec32c9cbb33e8221c7e27a98a882ba00690338db&
+      - 9001:9001
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: adminadmin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - pakoski_net
+    volumes:
+      - minio_data:/data
+
+  minio-mc:
+    image: minio/mc
+    entrypoint: /setup/entrypoint.sh
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: adminadmin
+    depends_on:
+      s3:
+        condition: service_healthy
+    volumes:
+      - ./minio:/setup
+    networks:
+      - pakoski_net
+
   nginx:
     image: nginx:latest
     ports:
@@ -83,8 +129,12 @@ services:
       - teamservice
       - hackathonservice
       - chatservice
+      - s3
     networks:
       - pakoski_net
 
 networks:
   pakoski_net:
+
+volumes:
+  minio_data:
