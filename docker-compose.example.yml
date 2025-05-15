@@ -130,6 +130,21 @@ services:
     networks:
       - pakoski_net
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      # web ui
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: adminadmin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - pakoski_net
+
   nginx:
     image: nginx:latest
     ports:
@@ -151,3 +166,4 @@ networks:
 
 volumes:
   minio_data:
+  rabbitmq_data:
