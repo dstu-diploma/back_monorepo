@@ -82,6 +82,10 @@ services:
       - ROOT_PATH=/chat
       - DATABASE_URL=postgres://postgres:password@db:5432/chatservice
       - JWT_SECRET=dstu
+      - USER_SERVICE_URL=http://userservice:8000/internal
+      - USER_SERVICE_API_KEY=apikey
+      - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal
+      - HACKATHON_SERVICE_API_KEY=apikey
     <<: *service-config
 
   s3:
