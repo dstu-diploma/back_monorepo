@@ -32,9 +32,9 @@ services:
       - S3_SECRET_KEY=adminadmin
       - ROOT_PATH=/team
       - DATABASE_URL=postgres://postgres:password@db:5432/teamservice
-      - USER_SERVICE_URL=http://userservice:8000/internal
+      - USER_SERVICE_URL=http://userservice:8000/internal/
       - USER_SERVICE_API_KEY=apikey
-      - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal
+      - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal/
       - HACKATHON_SERVICE_API_KEY=apikey
       - JWT_SECRET=dstu
       - INTERNAL_API_KEY=apikey
@@ -67,12 +67,12 @@ services:
       - ROOT_PATH=/hackathon
       - DATABASE_URL=postgres://postgres:password@db:5432/hackathonservice
       - JWT_SECRET=dstu
-      - TEAM_SERVICE_URL=http://teamservice:8000/internal
+      - TEAM_SERVICE_URL=http://teamservice:8000/internal/
       - TEAM_SERVICE_API_KEY=apikey
-      - USER_SERVICE_URL=http://userservice:8000/internal
+      - USER_SERVICE_URL=http://userservice:8000/internal/
       - USER_SERVICE_API_KEY=apikey
       - INTERNAL_API_KEY=apikey
-      - PUBLIC_API_URL=http://localhost/hackathon
+      - PUBLIC_API_URL=http://localhost/hackathon/
     <<: *service-config
 
   chatservice:
@@ -82,9 +82,9 @@ services:
       - ROOT_PATH=/chat
       - DATABASE_URL=postgres://postgres:password@db:5432/chatservice
       - JWT_SECRET=dstu
-      - USER_SERVICE_URL=http://userservice:8000/internal
+      - USER_SERVICE_URL=http://userservice:8000/internal/
       - USER_SERVICE_API_KEY=apikey
-      - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal
+      - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal/
       - HACKATHON_SERVICE_API_KEY=apikey
     <<: *service-config
 
