@@ -2,6 +2,8 @@ x-service-config: &service-config
   depends_on:
     db:
       condition: service_healthy
+    rabbitmq:
+      condition: service_healthy
   networks:
     - pakoski_net
 
@@ -23,6 +25,26 @@ services:
     networks:
       - pakoski_net
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      # web ui
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: adminadmin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - pakoski_net
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   teamservice:
     container_name: teamservice
     build: ./teamservice
@@ -39,6 +61,7 @@ services:
       - JWT_SECRET=dstu
       - INTERNAL_API_KEY=apikey
       - PUBLIC_API_URL=http://localhost/team
+      - RABBITMQ_URL=amqp://admin:adminadmin@rabbitmq/
     <<: *service-config
 
   userservice:
@@ -52,7 +75,7 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/userservice
       - JWT_SECRET=dstu
       - INTERNAL_API_KEY=apikey
-      - AVATAR_PATH=/uploads/avatars/
+      - RABBITMQ_URL=amqp://admin:adminadmin@rabbitmq/
     volumes:
       - ./dev/local/:/uploads/avatars/
     <<: *service-config
@@ -73,6 +96,7 @@ services:
       - USER_SERVICE_API_KEY=apikey
       - INTERNAL_API_KEY=apikey
       - PUBLIC_API_URL=http://localhost/hackathon/
+      - RABBITMQ_URL=amqp://admin:adminadmin@rabbitmq/
     <<: *service-config
 
   chatservice:
@@ -86,6 +110,7 @@ services:
       - USER_SERVICE_API_KEY=apikey
       - HACKATHON_SERVICE_URL=http://hackathonservice:8000/internal/
       - HACKATHON_SERVICE_API_KEY=apikey
+      - RABBITMQ_URL=amqp://admin:adminadmin@rabbitmq/
     <<: *service-config
 
   s3:
@@ -131,21 +156,6 @@ services:
         condition: service_healthy
     volumes:
       - ./minio:/setup
-    networks:
-      - pakoski_net
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      # web ui
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: adminadmin
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - pakoski_net
 
