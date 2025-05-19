@@ -40,10 +40,10 @@ services:
     networks:
       - pakoski_net
     healthcheck:
-      test: rabbitmq-diagnostics -q ping
+      test: rabbitmq-diagnostics --quiet check_running && rabbitmq-diagnostics --quiet check_local_alarms
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 5
 
   teamservice:
     container_name: teamservice
